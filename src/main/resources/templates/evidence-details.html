@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Evidence Intelligence | ForensiChain</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet">
+
+    <style>
+
+        body {
+            background: #f4f7fb;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #1f2937;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #111827, #1e3a8a) !important;
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.35rem;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: white;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, .15);
+        }
+
+        .page-header h2 {
+            font-weight: 700;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,.07);
+            overflow: hidden;
+        }
+
+        .card-header {
+            border: none;
+            font-weight: 600;
+            padding: 16px 20px;
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 18px;
+        }
+
+        .info-row {
+            padding: 13px 0;
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #6b7280;
+            font-size: .85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+        }
+
+        .info-value {
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        .hash-box {
+            word-break: break-all;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 10px;
+            border-left: 5px solid #198754;
+        }
+
+        .analysis-card {
+            background: linear-gradient(135deg, #ffffff, #f8fbff);
+        }
+
+        .analysis-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 18px;
+            height: 100%;
+            background: white;
+        }
+
+        .analysis-item i {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .analysis-item h6 {
+            font-weight: 700;
+        }
+
+        .analysis-item p {
+            color: #6b7280;
+            font-size: .9rem;
+            margin: 0;
+        }
+
+        .ocr-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-left: 5px solid #2563eb;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            min-height: 100px;
+        }
+
+        .timeline-dot {
+            width: 10px;
+            height: 10px;
+            background: #2563eb;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .action-btn {
+            min-width: 135px;
+            border-radius: 9px;
+            font-weight: 600;
+        }
+
+        .future-badge {
+            background: #eef2ff;
+            color: #3730a3;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            color: #6b7280;
+            padding: 30px 0;
+        }
+
+        @media(max-width:768px) {
+
+            .page-header {
+                padding: 22px;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar navbar-dark shadow">
+
+    <div class="container">
+
+        <a class="navbar-brand text-white text-decoration-none"
+           href="/dashboard">
+
+            <i class="bi bi-shield-lock-fill me-2"></i>
+
+            <b>ForensiChain</b>
+
+        </a>
+
+        <span class="text-white d-none d-md-block">
+            Digital Evidence Investigation Platform
+        </span>
+
+    </div>
+
+</nav>
+
+
+<div class="container mt-4 mb-5">
+
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="page-header mb-4">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+            <div>
+
+                <h2 class="mb-2">
+
+                    <i class="bi bi-file-earmark-lock2 me-2"></i>
+
+                    Evidence Intelligence
+
+                </h2>
+
+                <p class="mb-0">
+
+                    Digital evidence analysis, security and investigation record
+
+                </p>
+
+            </div>
+
+            <div class="mt-3 mt-md-0">
+
+                <span class="badge bg-light text-primary fs-6">
+
+                    Evidence #
+
+                    <span th:text="${evidence.id}">
+                        0
+                    </span>
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= BASIC INFORMATION ================= -->
+
+    <div class="row g-4">
+
+
+        <!-- Evidence Information -->
+
+        <div class="col-lg-6">
+
+            <div class="card h-100">
+
+                <div class="card-header bg-primary text-white">
+
+                    <i class="bi bi-info-circle me-2"></i>
+
+                    Evidence Information
+
+                </div>
+
+                <div class="card-body">
+
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Evidence ID
+                        </div>
+
+                        <div class="info-value"
+                             th:text="${evidence.id}">
+                        </div>
+
+                        <div class="card shadow mt-4">
+
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">
+            <i class="bi bi-folder2-open"></i>
+            Investigation Context
+        </h4>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <strong>Case Number</strong><br>
+
+                <a th:href="@{/cases/{id}(id=${case.id})}"
+                   class="text-primary fw-bold"
+                   th:text="${case.caseNumber}">
+                </a>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Case Title</strong><br>
+                <span th:text="${case.title}"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Case Type</strong><br>
+                <span th:text="${case.caseType}"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Priority</strong><br>
+                <span class="badge bg-danger"
+                      th:text="${case.priority}">
+                </span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Case Status</strong><br>
+                <span class="badge bg-success"
+                      th:text="${case.status}">
+                </span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Assigned Officer</strong><br>
+                <span th:text="${case.assignedOfficer}">
+                </span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Investigator</strong><br>
+                <span th:text="${case.investigator}">
+                </span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <strong>Case Created On</strong><br>
+                <span th:text="${case.createdAt}">
+                </span>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <a th:href="@{/cases/{id}(id=${case.id})}"
+           class="btn btn-primary">
+
+            <i class="bi bi-folder"></i>
+            Open Investigation Workspace
+
+        </a>
+
+    </div>
+</div>
+
+                    </div>
+
+
+                    <!-- ================= CASE ID - FIXED ================= -->
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Case ID
+                        </div>
+
+                        <div class="info-value">
+
+                            <!-- Case exists -->
+                            <span
+                                th:if="${evidence.investigationCase != null}"
+                                th:text="${evidence.investigationCase.id}">
+                            </span>
+
+                            <!-- Case does not exist -->
+                            <span
+                                th:unless="${evidence.investigationCase != null}"
+                                class="badge bg-secondary">
+                                Unassigned
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Owner
+                        </div>
+
+                        <div class="info-value">
+
+                            <i class="bi bi-person-circle me-1"></i>
+
+                            User
+                            <span th:text="${evidence.userId}"></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Uploaded On
+                        </div>
+
+                        <div class="info-value"
+                             th:text="${evidence.uploadedAt}">
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Current Status
+                        </div>
+
+                        <div class="info-value">
+
+                            <span
+                                class="badge bg-success"
+                                th:text="${evidence.status}">
+                                ACTIVE
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- File Information -->
+
+        <div class="col-lg-6">
+
+            <div class="card h-100">
+
+                <div class="card-header bg-dark text-white">
+
+                    <i class="bi bi-file-earmark me-2"></i>
+
+                    File Information
+
+                </div>
+
+                <div class="card-body">
+
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            File Name
+                        </div>
+
+                        <div class="info-value"
+                             th:text="${evidence.fileName}">
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Extension
+                        </div>
+
+                        <div class="info-value"
+                             th:text="${evidence.fileExtension}">
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Content Type
+                        </div>
+
+                        <div class="info-value"
+                             th:text="${evidence.contentType}">
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            File Size
+                        </div>
+
+                        <div class="info-value">
+
+                            <span th:text="${evidence.fileSize}">
+                                0
+                            </span>
+
+                            Bytes
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FORENSIC ANALYSIS ================= -->
+
+    <div class="card analysis-card mt-4">
+
+        <div class="card-header bg-success text-white">
+
+            <i class="bi bi-cpu me-2"></i>
+
+            Forensic Analysis
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+    <div class="col-md-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-primary">
+                    <i class="bi bi-fingerprint"></i>
+                    Evidence Classification
+                </h6>
+
+                <p class="text-muted">
+                    Automatically classified using file characteristics.
+                </p>
+
+                <span class="badge bg-primary fs-6"
+                      th:text="${classification}">
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-danger">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Risk Assessment
+                </h6>
+
+                <p class="text-muted">
+                    Automated preliminary forensic risk assessment.
+                </p>
+
+                <span class="badge bg-warning text-dark"
+                      th:text="${riskAssessment}">
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow mt-4">
+
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">
+            <i class="bi bi-database"></i>
+            Forensic Metadata
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <p class="text-muted">
+            Metadata extracted from the original evidence file.
+        </p>
+
+        <pre class="bg-light p-3 rounded"
+             style="white-space: pre-wrap;"
+             th:text="${evidence.metadata}">
+        </pre>
+
+    </div>
+
+</div>
+
+</div>
+
+    <!-- ================= INTEGRITY ================= -->
+
+    <div class="card mt-4">
+
+        <div class="card-header bg-dark text-white">
+
+            <i class="bi bi-fingerprint me-2"></i>
+
+            Integrity & Security
+
+        </div>
+
+        <div class="card-body">
+
+            <p class="fw-semibold mb-2">
+                SHA-256 Evidence Fingerprint
+            </p>
+
+            <div
+                class="hash-box"
+                th:text="${evidence.hashValue}">
+            </div>
+
+            <div class="alert alert-success mt-3 mb-0">
+
+                <i class="bi bi-shield-check me-2"></i>
+
+                <b>Integrity Status:</b>
+
+                Evidence fingerprint is securely stored for integrity verification.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= OCR ================= -->
+
+    <div class="card mt-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <i class="bi bi-text-paragraph me-2"></i>
+
+            Extracted Content / OCR
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="ocr-box">
+
+                <span
+                    th:if="${evidence.extractedText != null && !#strings.isEmpty(evidence.extractedText)}"
+                    th:text="${evidence.extractedText}">
+                </span>
+
+                <span
+                    th:if="${evidence.extractedText == null || #strings.isEmpty(evidence.extractedText)}"
+                    class="text-muted">
+
+                    No text was detected in this evidence.
+
+                    OCR analysis will be applied to supported evidence types.
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= CHAIN OF CUSTODY ================= -->
+
+    <div class="card mt-4">
+
+        <div class="card-header bg-dark text-white">
+
+            <i class="bi bi-clock-history me-2"></i>
+
+            Chain of Custody
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Action</th>
+
+                        <th>User</th>
+
+                        <th>Date & Time</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="log : ${auditLogs}">
+
+                        <td>
+
+                            <span class="timeline-dot"></span>
+
+                            <span
+                                class="badge bg-primary"
+                                th:text="${log.action}">
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <i class="bi bi-person-circle me-1"></i>
+
+                            User
+                            <span th:text="${log.userId}"></span>
+
+                        </td>
+
+                        <td th:text="${log.timestamp}">
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div
+                th:if="${auditLogs == null || #lists.isEmpty(auditLogs)}"
+                class="text-muted text-center p-3">
+
+                No custody events recorded yet.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FUTURE INTELLIGENCE ================= -->
+
+    <div class="card mt-4">
+
+        <div class="card-header bg-warning">
+
+            <i class="bi bi-stars me-2"></i>
+
+            Future Intelligence
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+
+                <div class="col-md-3">
+
+                    <div class="text-center p-3">
+
+                        <i class="bi bi-search fs-2 text-primary"></i>
+
+                        <h6 class="mt-2">
+                            Similar Evidence
+                        </h6>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <div class="text-center p-3">
+
+                        <i class="bi bi-diagram-3 fs-2 text-success"></i>
+
+                        <h6 class="mt-2">
+                            Evidence Relationships
+                        </h6>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <div class="text-center p-3">
+
+                        <i class="bi bi-clock-history fs-2 text-info"></i>
+
+                        <h6 class="mt-2">
+                            Timeline Analysis
+                        </h6>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <div class="text-center p-3">
+
+                        <i class="bi bi-robot fs-2 text-danger"></i>
+
+                        <h6 class="mt-2">
+                            AI Investigation
+                        </h6>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ACTIONS ================= -->
+
+    <div class="card mt-4">
+
+        <div class="card-body">
+
+            <div class="d-flex flex-wrap gap-2 justify-content-center">
+
+
+                <a
+                    class="btn btn-success action-btn"
+                    th:href="@{/evidence/download/{id}(id=${evidence.id},userId=${evidence.userId})}">
+
+                    <i class="bi bi-download me-1"></i>
+
+                    Download
+
+                </a>
+
+
+                <a
+                    class="btn btn-primary action-btn"
+                    href="/verifyPage">
+
+                    <i class="bi bi-shield-check me-1"></i>
+
+                    Verify
+
+                </a>
+
+
+                <a
+                    class="btn btn-secondary action-btn"
+                    href="/dashboard">
+
+                    <i class="bi bi-speedometer2 me-1"></i>
+
+                    Dashboard
+
+                </a>
+
+
+                <a
+                    class="btn btn-dark action-btn"
+                    href="/cases">
+
+                    <i class="bi bi-folder2-open me-1"></i>
+
+                    Cases
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <div class="footer">
+
+        <hr>
+
+        <h5>
+
+            <i class="bi bi-shield-lock-fill me-1"></i>
+
+            ForensiChain
+
+        </h5>
+
+        <p>
+            AI-Powered Digital Evidence Investigation Platform
+        </p>
+
+        <p>
+            Spring Boot • MySQL • Digital Forensics • Cybersecurity • AI
+        </p>
+
+        <p>
+            © 2026 ForensiChain
+        </p>
+
+    </div>
+
+</div>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+/target/
+/uploads/
+/.mvn/
+/.idea/
+/.vscode/
+*.log
+*.iml

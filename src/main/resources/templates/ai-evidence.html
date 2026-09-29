@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>AI Evidence Investigation</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet">
+
+    <style>
+
+        body {
+            background: #eef2f7;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg,#111827,#1e3a8a);
+        }
+
+        .card {
+            border: none;
+            border-radius: 18px;
+        }
+
+        .analysis {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            font-size: 16px;
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 25px;
+            border-left: 6px solid #0d6efd;
+        }
+
+        .title {
+            font-weight: 700;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark shadow">
+
+    <div class="container">
+
+        <a href="/dashboard"
+           class="navbar-brand">
+
+            <i class="bi bi-shield-lock-fill"></i>
+
+            <b>ForensiChain</b>
+
+        </a>
+
+        <span class="text-white">
+            AI Evidence Investigation
+        </span>
+
+    </div>
+
+</nav>
+
+
+<div class="container mt-5 mb-5">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3 class="mb-0">
+
+                <i class="bi bi-robot"></i>
+
+                AI Investigation Analysis
+
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="mb-4">
+
+                <h4 class="title">
+
+                    Evidence #
+
+                    <span th:text="${evidence.id}">
+                        0
+                    </span>
+
+                </h4>
+
+                <p class="text-muted">
+
+                    File:
+
+                    <b th:text="${evidence.fileName}">
+                        evidence
+                    </b>
+
+                </p>
+
+            </div>
+
+
+            <div class="analysis"
+                 th:text="${analysis}">
+
+            </div>
+
+
+            <div class="mt-4">
+
+                <a
+                    th:href="@{/evidence/{id}(id=${evidence.id})}"
+                    class="btn btn-secondary">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back to Evidence
+
+                </a>
+
+                <a
+                    href="/dashboard"
+                    class="btn btn-dark">
+
+                    <i class="bi bi-speedometer2"></i>
+
+                    Dashboard
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
